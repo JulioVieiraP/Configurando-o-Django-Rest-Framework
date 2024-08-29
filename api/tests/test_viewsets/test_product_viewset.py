@@ -41,4 +41,5 @@ def test_create_product(client):
     created_product = Product.objects.get(name='Teclado')
     
     assert created_product.name == 'Teclado'
+    assert len(created_product.description) >= 1
     assert created_product.price == 200
