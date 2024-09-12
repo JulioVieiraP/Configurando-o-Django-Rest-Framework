@@ -18,8 +18,8 @@ def test_get_all_products(client):
     assert response.status_code == status.HTTP_200_OK
     product_data = response.json()
 
-    assert product_data[0]["name"] == product.name
-    assert product_data[0]["description"] == product.description
+    assert product_data["results"][0]["name"] == product.name
+    assert product_data["results"][0]["description"] == product.description
 
 
 @pytest.mark.django_db
