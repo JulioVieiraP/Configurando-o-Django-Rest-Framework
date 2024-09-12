@@ -1,16 +1,13 @@
 import factory
 
-from api.models import Product, User
+from django.contrib.auth.models import User
+from api.models import Product
+from api.models.order import Order
 
 
 class UserFactory(factory.django.DjangoModelFactory):
-    name = factory.Faker("pystr")
-    username = factory.Faker("pystr")
-    phone_number = factory.Faker("pyint")
     email = factory.Faker("pystr")
-    password = factory.Faker("pystr")
-    city = factory.Faker("pystr")
-    address = factory.Faker("pystr")
+    username = factory.Faker("pystr")
 
     class Meta:
         model = User
@@ -23,3 +20,20 @@ class ProductFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Product
+
+
+class OrderFactory(factory.django.DjangoModelFactory):
+    user = factory.SubFactory(UserFactory)
+
+    @factory.post_generation
+    def product(self, create, extracted, **kwargs):
+        if not create:
+            return
+
+        if extracted:
+            for product in extracted:
+                self.product.add(product)
+
+    class Meta:
+        model = Order
+        skip_postgeneration_save = True
